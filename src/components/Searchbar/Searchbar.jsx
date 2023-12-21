@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import css from './Searchbar.module.css';
+import PropTypes from 'prop-types';
 
 export class Searchbar extends Component {
   state = {
@@ -9,8 +10,6 @@ export class Searchbar extends Component {
   handleChange = evt => {
     const { name, value } = evt.currentTarget;
     this.setState({ [name]: value.trim().toLowerCase() });
-    console.log(name);
-    console.log(value.trim().toLowerCase());
   };
 
   handleSubmit = e => {
@@ -23,7 +22,7 @@ export class Searchbar extends Component {
     };
     console.log('searchWord1', searchWord);
     this.props.onSubmit(this.state.searchName);
-    console.log('searchWord2', searchWord);
+
     this.reset();
   };
 
@@ -54,3 +53,8 @@ export class Searchbar extends Component {
     );
   }
 }
+
+
+Searchbar.propTypes = {
+  searchName: PropTypes.string,
+};

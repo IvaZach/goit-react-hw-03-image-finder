@@ -15,7 +15,6 @@ export class App extends Component {
   };
 
   handleFormSubmit = searchWord => {
-    console.log('searchWord3', searchWord);
     this.setState({ searchWord });
     console.log('searchWord4', searchWord);
   };
@@ -26,12 +25,10 @@ export class App extends Component {
         <Searchbar onSubmit={this.handleFormSubmit} />
         {/* {this.state.isLoading && ( */}
         <ImageGallery searchWord={this.state.searchWord} />
-        {/* )} */}
+       
 
-        {/* /* <Button /> */}
+        
       </Section>
     );
   }
 }
-
-

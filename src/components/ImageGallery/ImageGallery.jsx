@@ -4,6 +4,7 @@ import css from './ImageGallery.module.css';
 
 import PropTypes from 'prop-types';
 import { pixabayCard } from 'services/api';
+import { Button } from 'components/Button/Button';
 
 export default class ImageGallery extends Component {
   state = {
@@ -23,7 +24,20 @@ export default class ImageGallery extends Component {
         .then(searchCards => this.setState({ searchCards }))
         .catch(error => console.log(error));
     }
+    if(prevState.page !==page){
+    await pixabayCard(nextWord, page)
+    .then(searchCards => this.setState({ searchCards }))
+    .catch(error => console.log(error));
+   }
+
   }
+
+  handleClickMore = e => {
+    const pageNext = this.state.page + 1;
+    console.log('pageNext', pageNext);
+    this.setState({ page: pageNext });
+    
+  };
 
   render() {
     const { searchCards } = this.state;
@@ -31,20 +45,28 @@ export default class ImageGallery extends Component {
     console.log('searchCards - gallary', { searchCards });
 
     return (
-      <ul className={css.imageGallery}>
-        {searchCards.map(({ id, webformatURL, tags, largeImageURL }) => (
-          <ImageGalleryItem
-            key={id}
-            webformatURL={webformatURL}
-            tags={tags}
-            largeImageURL={largeImageURL}
-          />
-        ))}
-      </ul>
+      <>
+        <ul className={css.imageGallery}>
+          {searchCards.map(({ id, webformatURL, tags, largeImageURL }) => (
+            <ImageGalleryItem
+              key={id}
+              webformatURL={webformatURL}
+              tags={tags}
+              largeImageURL={largeImageURL}
+            />
+          ))}
+        </ul>
+        <Button onClick={this.handleClickMore} />
+      </>
     );
   }
 }
 
 ImageGallery.propTypes = {
   searchCards: PropTypes.array,
+  webformatURL: PropTypes.string,
+  largeImageURL: PropTypes.string,
+  tags: PropTypes.string,
+  id: PropTypes.number,
+  page: PropTypes.number,
 };
