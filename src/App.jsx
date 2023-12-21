@@ -1,25 +1,34 @@
+import ImageGallery from 'components/ImageGallery/ImageGallery';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import Section from 'components/Section/Section';
 import React, { Component } from 'react';
-
-// import ContactForm from './components/ContactForm/ContactForm';
-// import ContactList from './components/ContactList/ContactList';
-// import Filter from './components/Filter/Filter';
+import css from './App.module.css';
 
 // <Searchbar>, <ImageGallery>, <ImageGalleryItem>, <Loader>, <Button> і <Modal>
 
 export class App extends Component {
+  state = {
+    searchWord: '',
 
-  handleSubmit(e) {
-    console.log(e)
-  }
+    status: 'idle',
+    isLoading: false,
+  };
+
+  handleFormSubmit = searchWord => {
+    console.log('searchWord3', searchWord);
+    this.setState({ searchWord });
+    console.log('searchWord4', searchWord);
+  };
+
   render() {
     return (
-      <Section>
-      <h1 className="h1">PHONE BOOK</h1>
-        <Searchbar onSubmit={this.handleSubmit} />
+      <Section className={css.App}>
+        <Searchbar onSubmit={this.handleFormSubmit} />
+        {/* {this.state.isLoading && ( */}
+        <ImageGallery searchWord={this.state.searchWord} />
+        {/* )} */}
 
-
+        {/* /* <Button /> */}
       </Section>
     );
   }
