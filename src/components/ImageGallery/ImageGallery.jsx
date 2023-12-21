@@ -24,19 +24,18 @@ export default class ImageGallery extends Component {
         .then(searchCards => this.setState({ searchCards }))
         .catch(error => console.log(error));
     }
-    if(prevState.page !==page){
-    await pixabayCard(nextWord, page)
-    .then(searchCards => this.setState({ searchCards }))
-    .catch(error => console.log(error));
-   }
 
+    if (prevState.page !== page) {
+      await pixabayCard(nextWord, page)
+        .then(searchCards => this.setState({ searchCards }))
+        .catch(error => console.log(error));
+    }
   }
 
   handleClickMore = e => {
     const pageNext = this.state.page + 1;
-    console.log('pageNext', pageNext);
+    console.log('pageNext:', pageNext);
     this.setState({ page: pageNext });
-    
   };
 
   render() {
@@ -47,14 +46,20 @@ export default class ImageGallery extends Component {
     return (
       <>
         <ul className={css.imageGallery}>
-          {searchCards.map(({ id, webformatURL, tags, largeImageURL }) => (
-            <ImageGalleryItem
-              key={id}
-              webformatURL={webformatURL}
-              tags={tags}
-              largeImageURL={largeImageURL}
-            />
-          ))}
+          {searchCards.map(
+            ({ id, webformatURL, tags, largeImageURL, onImageClick }) => {
+              const clickImage = () => onImageClick(largeImageURL);
+              return (
+                <ImageGalleryItem
+                  key={id}
+                  webformatURL={webformatURL}
+                  tags={tags}
+                  largeImageURL={largeImageURL}
+                  onClick={clickImage}
+                />
+              );
+            }
+          )}
         </ul>
         <Button onClick={this.handleClickMore} />
       </>

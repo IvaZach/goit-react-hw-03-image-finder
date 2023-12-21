@@ -5,12 +5,7 @@ import PropTypes from 'prop-types';
 
 export const Button = ({ onClick }) => {
   return (
-    <button
-      type="button"
-      name="button"
-      className={css.button}
-      onClick={onClick}
-    >
+    <button type="button" className={css.button} onClick={onClick}>
       LOAD MORE
     </button>
   );
