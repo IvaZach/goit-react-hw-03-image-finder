@@ -11,6 +11,9 @@ export default class ImageGallery extends Component {
     searchCards: [],
     page: 1,
     perPage: 12,
+    showModal: false,
+    modalLargeImage: '',
+    status: 'idle'
   };
   async componentDidUpdate(prevProps, prevState) {
     const prevWord = prevProps.searchWord;
@@ -21,21 +24,37 @@ export default class ImageGallery extends Component {
       console.log('nextWord', nextWord);
 
       await pixabayCard(nextWord, page)
-        .then(searchCards => this.setState({ searchCards }))
-        .catch(error => console.log(error));
+        .then(searchCards => this.setState({ searchCards: searchCards }))
+        .catch(this.setState({status: 'error'}));
     }
 
-    if (prevState.page !== page) {
+    if (prevState.page !== page && page !== 1) {
       await pixabayCard(nextWord, page)
-        .then(searchCards => this.setState({ searchCards }))
-        .catch(error => console.log(error));
+        .then(searchCards => {
+          this.setState(prevState => ({
+            searchCards: [...prevState.searchCards, ...searchCards],
+          }));
+        })
+        .catch(this.setState({status: 'error'}));
     }
+    
   }
 
   handleClickMore = e => {
     const pageNext = this.state.page + 1;
     console.log('pageNext:', pageNext);
-    this.setState({ page: pageNext });
+    this.setState({ page: pageNext,
+      status: 'pending' });
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  modalImage = (id, largeImageURL, tags) => {
+    this.setState({ modalLargeImage: { id: id, largeImageURL: largeImageURL, tags: tags } });
   };
 
   render() {
@@ -46,23 +65,25 @@ export default class ImageGallery extends Component {
     return (
       <>
         <ul className={css.imageGallery}>
-          {searchCards.map(
-            ({ id, webformatURL, tags, largeImageURL, onImageClick }) => {
-              const clickImage = () => onImageClick(largeImageURL);
-              return (
-                <ImageGalleryItem
-                  key={id}
-                  webformatURL={webformatURL}
-                  tags={tags}
-                  largeImageURL={largeImageURL}
-                  onClick={clickImage}
-                />
-              );
-            }
-          )}
+          {searchCards.map(({ id, webformatURL, tags, largeImageURL }) => {
+            const dataModalImage = () => this.modalImage(id, largeImageURL, tags)
+            return (
+              <ImageGalleryItem
+                key={id}
+                webformatURL={webformatURL}
+                tags={tags}
+                largeImageURL={largeImageURL}
+                onToggleModal={this.toggleModal}
+                showModal={this.state.showModal}
+                modalImage={dataModalImage}
+              />
+            );
+          })}
         </ul>
-        <Button onClick={this.handleClickMore} />
+        {searchCards.length > 0 && <Button onClick={this.handleClickMore} />}
+        
       </>
+      
     );
   }
 }
