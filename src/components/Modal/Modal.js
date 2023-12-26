@@ -4,37 +4,32 @@ import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 
 const modalRoot = document.querySelector('#modal-root');
-export default class Modal extends Component {
+export class Modal extends Component {
   componentDidMount() {
-    console.log('componentDidMount');
-
-    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('keydown', this.handlePressESC);
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
-    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keydown', this.handlePressESC);
   }
 
-  handleKeyDown = e => {
+  handlePressESC = e => {
     if (e.code === 'Escape') {
-      console.log('close Modalku');
-
-      this.props.onClose();
-    }
-  };
-
-  backdropClick = event => {
-    if (event.target === event.currentTarget) {
-      console.log('event.target',event.target)
-      this.props.closeModal();
+      this.props.onCloseModal();
     }
   };
 
   render() {
+    const { onLargeImage, onCloseModal } = this.props;
     return createPortal(
-      <div className={css.overlay} onClick={this.backdropClick}>
-        <div className={css.modal}>{this.props.children}</div>
+      <div className={css.overlay} onClick={onCloseModal}>
+        <div className={css.modal}>
+          <img
+            src={onLargeImage.img}
+            alt={onLargeImage.tags}
+            key={onLargeImage.id}
+          />
+        </div>
       </div>,
       modalRoot
     );
@@ -42,7 +37,10 @@ export default class Modal extends Component {
 }
 
 Modal.propTypes = {
-  largeImageURL: PropTypes.string,
-  id: PropTypes.number,
-  onToggleModal: PropTypes.func,
+  onCloseModal: PropTypes.func,
+  onLargeImage: PropTypes.shape({
+    id: PropTypes.number,
+    tags: PropTypes.string,
+    img: PropTypes.string,
+  }),
 };

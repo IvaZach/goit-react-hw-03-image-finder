@@ -10,7 +10,6 @@ export class Searchbar extends Component {
   handleChange = evt => {
     const { name, value } = evt.currentTarget;
     this.setState({ [name]: value.trim().toLowerCase() });
-    
   };
 
   handleSubmit = e => {
@@ -18,10 +17,7 @@ export class Searchbar extends Component {
     if (this.state.searchName.trim() === '') {
       return;
     }
-    const searchWord = {
-      searchName: this.state.searchName,
-    };
-    console.log('searchWord1', searchWord);
+
     this.props.onSubmit(this.state.searchName);
 
     this.reset();
@@ -54,7 +50,6 @@ export class Searchbar extends Component {
     );
   }
 }
-
 
 Searchbar.propTypes = {
   searchName: PropTypes.string,

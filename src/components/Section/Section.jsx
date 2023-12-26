@@ -1,8 +1,8 @@
 import React from 'react';
 
 
-const Section = ({ children }) => (
+export const Section = ({ children }) => (
   <section>{children}</section>
 );
 
-export default Section;
+
