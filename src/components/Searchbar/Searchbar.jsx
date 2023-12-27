@@ -14,12 +14,13 @@ export class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.searchName.trim() === '') {
+    const { searchName } = this.state;
+
+    if (searchName.trim() === '') {
       return;
     }
 
-    this.props.onSubmit(this.state.searchName);
-
+    this.props.onSubmit(searchName);
     this.reset();
   };
 

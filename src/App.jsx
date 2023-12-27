@@ -22,6 +22,7 @@ export class App extends Component {
     const { searchWord, page } = this.state;
     console.log('searchWord', searchWord);
     console.log('page', page);
+
     if (prevState.searchWord !== searchWord) {
       this.setState({ isLoading: true });
 
@@ -54,6 +55,7 @@ export class App extends Component {
         });
     }
   }
+
   handleFormSubmit = newSearchWord => {
     this.setState({ searchCards: [], searchWord: newSearchWord, page: 1 });
   };
@@ -72,22 +74,25 @@ export class App extends Component {
 
   onLargeImage = (id, img, tags) => {
     this.setState({ largeImageURL: { id: id, img: img, tags: tags } });
-    console.log('largeImageURL id, img, tags', id, img, tags);
   };
 
   render() {
-    const { isLoading, isShowModal, largeImageURL, searchCards } = this.state;
+    const { isLoading, isShowModal, largeImageURL, searchCards, searchWord } =
+      this.state;
+
     return (
       <Section className={css.App}>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
-        <ImageGallery
-          onShowModal={this.showModal}
-          searchCards={this.state.searchCards}
-          handleClickMore={this.handleClickMore}
-          onLargeImage={this.onLargeImage}
-          onLoading={isLoading}
-        />
+        {searchWord !== '' && (
+          <ImageGallery
+            onShowModal={this.showModal}
+            searchCards={searchCards}
+            handleClickMore={this.handleClickMore}
+            onLargeImage={this.onLargeImage}
+            onLoading={isLoading}
+          />
+        )}
 
         {isLoading && <Loader />}
 
